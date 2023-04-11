@@ -15,7 +15,7 @@ class Bug
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $descrition = null;
+    private ?string $description = null;
 
     #[ORM\Column(length: 255)]
     private ?string $priority = null;
@@ -51,12 +51,12 @@ class Bug
 
     public function getDescrition(): ?string
     {
-        return $this->descrition;
+        return $this->description;
     }
 
-    public function setDescrition(string $descrition): self
+    public function setDescrition(string $description): self
     {
-        $this->descrition = $descrition;
+        $this->description = $description;
 
         return $this;
     }
