@@ -1,0 +1,9 @@
+nelmio_api_doc:
+    documentation:
+        info:
+            title: Bug Tracker
+            description: Don't let bugs to take over your app!
+            version: 1.0.0
+    areas: # to filter documented areas
+        path_patterns:
+            - ^/(?!/doc$) # Accepts routes under /api except /api/doc
