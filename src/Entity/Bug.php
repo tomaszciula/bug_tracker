@@ -44,6 +44,9 @@ class Bug
     #[ORM\Column(type: Types::BLOB, nullable: true)]
     private $screenshot = null;
 
+    #[ORM\ManyToOne(inversedBy: 'bug')]
+    private ?Project $project = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -165,6 +168,18 @@ class Bug
     public function setScreenshot($screenshot): self
     {
         $this->screenshot = $screenshot;
+
+        return $this;
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): self
+    {
+        $this->project = $project;
 
         return $this;
     }

@@ -13,10 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-
 class BugsController extends AbstractController
 {
-
     private BugRepository $bugRepository;
     private EntityManagerInterface $entityManagerInterface;
     private HttpClientInterface $httpClient;
@@ -50,14 +48,14 @@ class BugsController extends AbstractController
             'responsible' => 'Papcio Chmiel',
             'comment' => 'komentarz'
         ];
-        $this->apiImplementation->addBug($this->entityManagerInterface, $this->httpClient, $dummy);
+        $this->apiImplementation->addBug($dummy);
         return new JsonResponse('New bug saved');
     }
 
     #[Route('/bug/{id}', name: 'bug_delete', methods: 'DELETE')]
     public function deleteBug(int $id): JsonResponse
     {
-        $bug = $this->bugRepository->findOneBy([$id]);
+        $bug = $this->bugRepository->findOneBy(['id' => $id]);
         $this->entityManagerInterface->remove($bug);
         $this->entityManagerInterface->flush();
         if (http_response_code() !== 200) {
@@ -67,6 +65,21 @@ class BugsController extends AbstractController
         } else {
             return $this->json([
                 'message' => 'bug has been removed',
+            ]);
+        }
+    }
+
+    #[Route('/bug/{id}', name: 'bug_by_id', methods: 'GET')]
+    public function getBugByID(int $id): JsonResponse
+    {
+        $bug = $this->bugRepository->findOneBy(['id' => $id]);
+        if (http_response_code() !== 200) {
+            return $this->json([
+                'error' => http_response_code(),
+            ]);
+        } else {
+            return $this->json([
+                $bug,
             ]);
         }
     }
