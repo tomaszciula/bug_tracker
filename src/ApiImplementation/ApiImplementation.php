@@ -44,7 +44,7 @@ class ApiImplementation
         ]);
     }
 
-    public function addProject(array $projectData): JsonResponse
+    public function addProject( $projectData): JsonResponse
     {
         $project = new Project();
         $project->setName($projectData['name']);

@@ -35,20 +35,11 @@ class BugsController extends AbstractController
     }
 
     #[Route('/add/bug', name: 'app_bugs_post', methods: 'POST')]
-    public function addBug(): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
-        $dummy = [
-            'description' => 'description',
-            'priority' => "critical",
-            'important' => 'low',
-            'status' => 'reported',
-            'environment' => 'windows, chrome',
-            'reporting' => 'Tomcio Pomcio',
-            'date' => new \DateTime(),
-            'responsible' => 'Papcio Chmiel',
-            'comment' => 'komentarz'
-        ];
-        $this->apiImplementation->addBug($dummy);
+        $bugData = $request->getContent();
+        $bugData = json_decode($bugData);
+        $this->apiImplementation->addBug((array)$bugData);
         return new JsonResponse('New bug saved');
     }
 

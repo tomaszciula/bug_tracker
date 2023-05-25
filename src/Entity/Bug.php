@@ -172,10 +172,10 @@ class Bug
         return $this;
     }
 
-    public function getProject(): ?Project
-    {
-        return $this->project;
-    }
+    // public function getProject(): ?Project
+    // {
+    //     return $this->project;
+    // }
 
     public function setProject(?Project $project): self
     {

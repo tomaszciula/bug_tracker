@@ -7,6 +7,7 @@ use App\Repository\ProjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -17,7 +18,8 @@ class ProjectsController extends AbstractController
     private EntityManagerInterface $entityManagerInterface;
     private HttpClientInterface $httpClientInterface;
     private ApiImplementation $apiImplementation;
-    public function __construct(ProjectRepository $projectRepository, EntityManagerInterface $entityManagerInterface, HttpClientInterface $httpClientInterface, ApiImplementation $apiImplementation){
+    public function __construct(ProjectRepository $projectRepository, EntityManagerInterface $entityManagerInterface, HttpClientInterface $httpClientInterface, ApiImplementation $apiImplementation)
+    {
         $this->projectRepository = $projectRepository;
         $this->entityManagerInterface = $entityManagerInterface;
         $this->httpClientInterface = $httpClientInterface;
@@ -31,13 +33,11 @@ class ProjectsController extends AbstractController
         );
     }
         #[Route('/add/project', name: 'app_projects_post', methods: 'POST')]
-    public function addProject(): JsonResponse
+    public function __invoke(Request $request): JsonResponse
     {
-        $projectData = [
-            'name' => 'My new project',
-            'description' => 'description',
-        ];
-        $this->apiImplementation->addProject($projectData);
+        $projectData = $request->getContent();
+        $projectData = json_decode($projectData);
+        $this->apiImplementation->addProject((array)$projectData);
         return new JsonResponse('New project saved');
     }
 
