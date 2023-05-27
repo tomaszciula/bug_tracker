@@ -21,7 +21,7 @@ security:
                 check_path: app_login
                 enable_csrf: true
             logout:
-                path: app_logout
+                path: app_home
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -38,6 +38,7 @@ security:
         - { path: '^/superadmin', roles: ROLE_SUPERADMIN}
         - { path: '^/admin', roles: ROLE_ADMIN }
         - { path: '^/profile', roles: ROLE_USER }
+        - { path: '^/board', roles: ROLE_USER }
     role_hierarchy:
         ROLE_ADMIN:      ROLE_USER
         ROLE_SUPERADMIN: ROLE_ADMIN
