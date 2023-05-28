@@ -52,12 +52,12 @@ class Bug
         return $this->id;
     }
 
-    public function getDescrition(): ?string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function setDescrition(string $description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -172,10 +172,10 @@ class Bug
         return $this;
     }
 
-    // public function getProject(): ?Project
-    // {
-    //     return $this->project;
-    // }
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
 
     public function setProject(?Project $project): self
     {
