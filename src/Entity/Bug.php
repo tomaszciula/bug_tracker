@@ -5,10 +5,12 @@ namespace App\Entity;
 use App\Repository\BugRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: BugRepository::class)]
 class Bug
 {
+    // #[Groups(['user'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -44,6 +46,7 @@ class Bug
     #[ORM\Column(type: Types::BLOB, nullable: true)]
     private $screenshot = null;
 
+    // #[Groups(['user'])]
     #[ORM\ManyToOne(inversedBy: 'bug')]
     private ?Project $project = null;
 

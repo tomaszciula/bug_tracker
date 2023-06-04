@@ -1,6 +1,6 @@
 import React from "react";
 
-const Dashboard = () => {
+export default function (props) {
     return (
       <>
         <aside className="ml-[-100%] fixed z-10 top-0 pb-3 px-6 w-full flex flex-col justify-between h-screen border-r bg-white transition duration-300 md:w-4/12 lg:ml-0 lg:w-[25%] xl:w-[20%] 2xl:w-[15%]">
@@ -25,8 +25,9 @@ const Dashboard = () => {
                 // width={32}
                 // height={32}
               />
-              <h5 className="hidden mt-4 text-xl font-semibold text-gray-600 lg:block">
-                Cynthia J. Watts
+              <h5 className="hidden mt-4 text-5xl font-semibold text-red-600 lg:block">
+                {/* Cynthia J. Watts */}
+                {props.fullName}
               </h5>
               <span className="hidden text-gray-400 lg:block">Admin</span>
             </div>
@@ -52,7 +53,7 @@ const Dashboard = () => {
                       className="fill-current group-hover:text-sky-300"
                     ></path>
                   </svg>
-                  <span className="-mr-1 font-medium">Dashboard</span>
+                  <span className="-mr-1 font-medium">XXX</span>
                 </a>
               </li>
               <li>
@@ -1080,4 +1081,3 @@ const Dashboard = () => {
     );
   };
   
-  export default Dashboard;
