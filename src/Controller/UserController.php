@@ -20,7 +20,14 @@ class UserController extends AbstractController
         $this->entityManagerInterface = $entityManagerInterface;
         $this->userRepository = $userRepository;
     }
-    #[Route('/users', name: 'app_user')]
+    #[Route('/user', name: 'app_user')]
+    public function __invoke(): JsonResponse
+    {
+        $user = $this->getUser();
+        return $this->json($user);
+    }
+
+    #[Route('/users', name: 'app_users')]
     public function index(): JsonResponse
     {
         return $this->json([
