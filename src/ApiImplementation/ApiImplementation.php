@@ -6,6 +6,7 @@ namespace App\ApiImplementation;
 
 use App\Entity\Bug;
 use App\Entity\Project;
+use App\Entity\User;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Entity;
@@ -19,14 +20,14 @@ class ApiImplementation
     public function __construct(
         HttpClientInterface $httpClientInterface,
         EntityManagerInterface $entityManagerInterface,
-    ){
+    ) {
         $this->httpClientInterface = $httpClientInterface;
         $this->entityManagerInterface = $entityManagerInterface;
     }
     public function addBug(array $bugData): JsonResponse
     {
         $bug = new Bug();
-        $bug->setDescrition($bugData['description']);
+        $bug->setDescription($bugData['description']);
         $bug->setPriority($bugData['priority']);
         $bug->setImportant($bugData['important']);
         $bug->setStatus($bugData['status']);
@@ -44,7 +45,7 @@ class ApiImplementation
         ]);
     }
 
-    public function addProject( $projectData): JsonResponse
+    public function addProject($projectData): JsonResponse
     {
         $project = new Project();
         $project->setName($projectData['name']);
@@ -55,6 +56,21 @@ class ApiImplementation
 
         return new JsonResponse([
             'message' => 'New project has been added',
+        ]);
+    }
+    public function addUser($userData): JsonResponse
+    {
+        $user = new User();
+        $user->setEmail($userData['email']);
+        $user->addRole($userData['role']);
+        $user->setPassword($userData['password']);
+        $user->setIsVerified(true);
+
+        $this->entityManagerInterface->persist($user);
+        $this->entityManagerInterface->flush();
+
+        return new JsonResponse([
+            'message' => 'New user has been added',
         ]);
     }
 }

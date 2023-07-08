@@ -44,7 +44,7 @@ class BugsController extends AbstractController
         $json = $serializer->serialize($bugs, 'json');
 
         return $this->json(
-            json_decode($json)
+            json_decode($json),
             // [ $this->bugRepository->findAll()]
         );
     }

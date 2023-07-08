@@ -165,7 +165,7 @@ class Bug
 
     public function getScreenshot()
     {
-        return $this->screenshot;
+        return (string) $this->screenshot;
     }
 
     public function setScreenshot($screenshot): self
