@@ -50,6 +50,21 @@ class Bug
     #[ORM\ManyToOne(inversedBy: 'bug')]
     private ?Project $project = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $title = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $steps_to_bug = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $expected_behavior = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $actuall_behavior = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $screenPhoto = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -183,6 +198,66 @@ class Bug
     public function setProject(?Project $project): self
     {
         $this->project = $project;
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function getStepsToBug(): ?string
+    {
+        return $this->steps_to_bug;
+    }
+
+    public function setStepsToBug(string $steps_to_bug): self
+    {
+        $this->steps_to_bug = $steps_to_bug;
+
+        return $this;
+    }
+
+    public function getExpectedBehavior(): ?string
+    {
+        return $this->expected_behavior;
+    }
+
+    public function setExpectedBehavior(string $expected_behavior): self
+    {
+        $this->expected_behavior = $expected_behavior;
+
+        return $this;
+    }
+
+    public function getActuallBehavior(): ?string
+    {
+        return $this->actuall_behavior;
+    }
+
+    public function setActuallBehavior(string $actuall_behavior): self
+    {
+        $this->actuall_behavior = $actuall_behavior;
+
+        return $this;
+    }
+
+    public function getScreenPhoto(): ?string
+    {
+        return $this->screenPhoto;
+    }
+
+    public function setScreenPhoto(string $screenPhoto): self
+    {
+        $this->screenPhoto = $screenPhoto;
 
         return $this;
     }

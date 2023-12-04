@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class ApiImplementation
 {
@@ -58,12 +59,20 @@ class ApiImplementation
             'message' => 'New project has been added',
         ]);
     }
-    public function addUser($userData): JsonResponse
+    public function addUser(UserPasswordHasherInterface $passwordHasher, $userData): JsonResponse
     {
         $user = new User();
+        $user->setFirstname($userData['firstname']);
+        $user->setLastname($userData['lastname']);
         $user->setEmail($userData['email']);
         $user->addRole($userData['role']);
-        $user->setPassword($userData['password']);
+        $user->setPosition($userData['position']);
+        $plainPassword = $userData['password'];
+        $hashedPassword = $passwordHasher->hashPassword(
+            $user,
+            $plainPassword,
+        );
+        $user->setPassword($hashedPassword);
         $user->setIsVerified(true);
 
         $this->entityManagerInterface->persist($user);

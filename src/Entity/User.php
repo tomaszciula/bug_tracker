@@ -38,6 +38,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Project::class, mappedBy: 'user')]
     private Collection $projects;
 
+    #[ORM\Column(length: 255)]
+    private ?string $firstname = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $lastname = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $position = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $userPhoto = null;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
@@ -156,5 +168,53 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
        if (false === in_array($role, $this->roles)) {
           $this->roles[] = $role;
        }
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getPosition(): ?string
+    {
+        return $this->position;
+    }
+
+    public function setPosition(string $position): self
+    {
+        $this->position = $position;
+
+        return $this;
+    }
+
+    public function getUserPhoto(): ?string
+    {
+        return $this->userPhoto;
+    }
+
+    public function setUserPhoto(?string $userPhoto): self
+    {
+        $this->userPhoto = $userPhoto;
+
+        return $this;
     }
 }
