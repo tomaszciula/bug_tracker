@@ -32,9 +32,12 @@ class ChatController extends AbstractController
             $options
         );
 
+        // $request->getContent();
+        $data = json_decode($request->getContent(), true);
+
         // $data['message'] = 'hello Tomek to działa!';
-        $data['message'] = $request->getContent();
-        $pusher->trigger('my-channel', 'my-event', $data['message']);
+        // $data['username'] = $request->getContent();
+        $pusher->trigger('my-channel', 'my-event', $data);
         // $messageBusInterface->dispatch(new SmsNotification($request->getContent()));
         // $messageBusInterface->dispatch(new ChatMessage('Chat message'));
         return $this->render('chat/index.html.twig', [

@@ -50,9 +50,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $userPhoto = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Note::class)]
+    private Collection $note;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Todo::class)]
+    private Collection $todo;
+
     public function __construct()
     {
         $this->projects = new ArrayCollection();
+        $this->note = new ArrayCollection();
+        $this->todo = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -214,6 +222,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUserPhoto(?string $userPhoto): self
     {
         $this->userPhoto = $userPhoto;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Note>
+     */
+    public function getNote(): Collection
+    {
+        return $this->note;
+    }
+
+    public function addNote(Note $note): self
+    {
+        if (!$this->note->contains($note)) {
+            $this->note->add($note);
+            $note->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNote(Note $note): self
+    {
+        if ($this->note->removeElement($note)) {
+            // set the owning side to null (unless already changed)
+            if ($note->getUser() === $this) {
+                $note->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Todo>
+     */
+    public function getTodo(): Collection
+    {
+        return $this->todo;
+    }
+
+    public function addTodo(Todo $todo): self
+    {
+        if (!$this->todo->contains($todo)) {
+            $this->todo->add($todo);
+            $todo->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTodo(Todo $todo): self
+    {
+        if ($this->todo->removeElement($todo)) {
+            // set the owning side to null (unless already changed)
+            if ($todo->getUser() === $this) {
+                $todo->setUser(null);
+            }
+        }
 
         return $this;
     }

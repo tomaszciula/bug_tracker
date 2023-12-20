@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Project;
 use App\ApiImplementation\ApiImplementation;
 use App\Repository\ProjectRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+// use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,19 +17,25 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Component\Security\Core\Security;
+
 
 class ProjectsController extends AbstractController
 {
     private ProjectRepository $projectRepository;
+    private UserRepository $userRepository;
     private EntityManagerInterface $entityManagerInterface;
     private HttpClientInterface $httpClientInterface;
     private ApiImplementation $apiImplementation;
-    public function __construct(ProjectRepository $projectRepository, EntityManagerInterface $entityManagerInterface, HttpClientInterface $httpClientInterface, ApiImplementation $apiImplementation)
+    private Security $security;
+    public function __construct(ProjectRepository $projectRepository, UserRepository $userRepository, EntityManagerInterface $entityManagerInterface, HttpClientInterface $httpClientInterface, ApiImplementation $apiImplementation, Security $security)
     {
         $this->projectRepository = $projectRepository;
+        $this->userRepository = $userRepository;
         $this->entityManagerInterface = $entityManagerInterface;
         $this->httpClientInterface = $httpClientInterface;
         $this->apiImplementation = $apiImplementation;
+        $this->security = $security;
     }
     
     #[Route('/projects', name: 'app_projects')]
@@ -53,7 +62,21 @@ class ProjectsController extends AbstractController
     {
         $projectData = $request->getContent();
         $projectData = json_decode($projectData);
-        $this->apiImplementation->addProject((array)$projectData);
+
+        $newProject = new Project();
+        $newProject->setName($projectData->name);
+        $newProject->setDescription($projectData->description);
+
+        $userId = $projectData->user->id;
+        $user = $this->userRepository->findOneBy(['id' => $userId]);
+
+        $newProject->addUser($user);
+
+        $this->entityManagerInterface->persist($newProject);
+        $this->entityManagerInterface->persist($user);
+        $this->entityManagerInterface->flush();
+
+        // $this->apiImplementation->addProject((array)$projectData);
         return new JsonResponse('New project saved');
     }
 

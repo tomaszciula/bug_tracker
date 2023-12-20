@@ -1,9 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\ApiImplementation\ApiImplementation;
+use App\Entity\Project;
 use App\Repository\BugRepository;
+use App\Repository\ProjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,12 +22,14 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class BugsController extends AbstractController
 {
     private BugRepository $bugRepository;
+    private ProjectRepository $projectRepository;
     private EntityManagerInterface $entityManagerInterface;
     private HttpClientInterface $httpClient;
     private ApiImplementation $apiImplementation;
-    public function __construct(BugRepository $bugRepository, EntityManagerInterface $entityManagerInterface, HttpClientInterface $httpClient, ApiImplementation $apiImplementation)
+    public function __construct(BugRepository $bugRepository, ProjectRepository $projectRepository, EntityManagerInterface $entityManagerInterface, HttpClientInterface $httpClient, ApiImplementation $apiImplementation)
     {
         $this->bugRepository = $bugRepository;
+        $this->projectRepository = $projectRepository;
         $this->entityManagerInterface = $entityManagerInterface;
         $this->httpClient = $httpClient;
         $this->apiImplementation = $apiImplementation;
@@ -52,9 +58,11 @@ class BugsController extends AbstractController
     #[Route('/add/bug', name: 'app_bugs_post', methods: 'POST')]
     public function __invoke(Request $request): JsonResponse
     {
+        $repository = $this->entityManagerInterface->getRepository(Project::class);
         $bugData = $request->getContent();
         $bugData = json_decode($bugData);
-        $this->apiImplementation->addBug((array)$bugData);
+        $project = $repository->findOneBy(['name' => $bugData->project]);
+        $this->apiImplementation->addBug((array)$bugData, $project);
         return new JsonResponse('New bug saved');
     }
 
@@ -86,6 +94,24 @@ class BugsController extends AbstractController
         } else {
             return $this->json([
                 json_encode($bug),
+            ]);
+        }
+    }
+    #[Route('/bug/update/status', name: 'bug_update_status', methods: 'PUT')]
+    public function updateBug(Request $request): JsonResponse
+    {
+        $bug = $this->bugRepository->findOneBy(['id' => $request->request->get('id')]);
+        $bug->setStatus(
+            $request->request->get('status')
+        );
+        $this->entityManagerInterface->flush();
+        if (http_response_code() !== 200) {
+            return $this->json([
+                'error' => http_response_code(),
+            ]);
+        } else {
+            return $this->json([
+                'message' => 'bug status has been updated',
             ]);
         }
     }
