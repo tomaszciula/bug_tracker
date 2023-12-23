@@ -15,8 +15,10 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-
-
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 class UserController extends AbstractController
 {
@@ -42,15 +44,33 @@ class UserController extends AbstractController
     #[Route('/user', name: 'app_user')]
     public function __invoke(): JsonResponse
     {
-        return $this->json($this->getUser());
+        $user = $this->getUser();
+        $encoder = new JsonEncoder();
+        $defaultContext = [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+        ];
+        $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+        $serializer = new Serializer([$normalizer], [$encoder]);
+        $json = $serializer->serialize($user, 'json');
+        return $this->json(json_decode($json));
     }
 
     #[Route('/users', name: 'app_users')]
     public function index(): JsonResponse
     {
-        return $this->json([
-            $this->userRepository->findAll(),
-        ]);
+        $users =  $this->userRepository->findAll();
+        $encoder = new JsonEncoder();
+        $defaultContext = [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+        ];
+        $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+        $serializer = new Serializer([$normalizer], [$encoder]);
+        $json = $serializer->serialize($users, 'json');
+        return $this->json(json_decode($json));
     }
 
     #[Route('/add/user', name: 'app_user_post', methods: 'POST')]
@@ -58,7 +78,7 @@ class UserController extends AbstractController
     {
         $userData = $request->getContent();
         $userData = json_decode($userData);
-        $this->apiImplementation->addUser($this->passwordHasher ,(array)$userData);
+        $this->apiImplementation->addUser($this->passwordHasher, (array)$userData);
         return new JsonResponse('New bug saved');
     }
 
@@ -86,7 +106,7 @@ class UserController extends AbstractController
         // $this->redirectToRoute('app_login');
 
         return new JsonResponse('User added successfully');
-       
+
     }
 
     #[Route('/redirectToLogin', name: 'app_redirect_to_login', methods: 'GET')]
