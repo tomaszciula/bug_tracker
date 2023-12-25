@@ -80,10 +80,14 @@ class NotesController extends AbstractController
 
     public function deleteNote(int $id): JsonResponse
     {
-        $note = $this->noteRepository->findOneBy(['id' => $id]);
-
-        $this->entityManager->remove($note);
-        $this->entityManager->flush();
-        return new JsonResponse('Note deleted successfully', Response::HTTP_OK);
+        $note = $this->noteRepository->find($id);
+        var_dump($note);
+        if (!$note) {
+            return new JsonResponse('Note not found', Response::HTTP_NOT_FOUND);
+        } else {
+            $this->entityManager->remove($note);
+            $this->entityManager->flush();
+            return new JsonResponse('Note deleted successfully', Response::HTTP_OK);
+        }
     }
 }
