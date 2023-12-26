@@ -76,7 +76,7 @@ class TodosController extends AbstractController
         return new JsonResponse('Note added successfully', Response::HTTP_CREATED);
     }
 
-    #[Route('/delete/note/{id}', name: 'app_delete_note_id', methods: ['DELETE'])]
+    #[Route('/delete/todo/{id}', name: 'app_delete_todo_id', methods: ['DELETE'])]
 
     public function deleteNote(int $id): JsonResponse
     {
@@ -85,5 +85,21 @@ class TodosController extends AbstractController
         $this->entityManager->remove($todo);
         $this->entityManager->flush();
         return new JsonResponse('Note deleted successfully', Response::HTTP_OK);
+    }
+
+
+    #[Route('/done', name: 'app_update_todo_id', methods: ['PUT'])]
+    public function done(Request $request): JsonResponse
+    {
+        $req = $request->getContent();
+        $req = json_decode($req);
+
+        $id = $req->id;
+        $done = $req->done;
+        $todo = $this->todoRepository->findOneBy(['id' => $id]);
+        $todo->setDone($done);
+        $this->entityManager->persist($todo);
+        $this->entityManager->flush();
+        return new JsonResponse('Note updated successfully', Response::HTTP_OK);
     }
 }

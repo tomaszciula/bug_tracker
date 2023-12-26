@@ -3,14 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Note;
-use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\NoteRepository;
 use App\Repository\UserRepository;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -22,13 +20,11 @@ class NotesController extends AbstractController
 {
     private NoteRepository $noteRepository;
     private UserRepository $userRepository;
-    private Security $security;
     private EntityManagerInterface $entityManager;
-    public function __construct(NoteRepository $noteRepository, UserRepository $userRepository, Security $security, EntityManagerInterface $entityManager)
+    public function __construct(NoteRepository $noteRepository, UserRepository $userRepository, EntityManagerInterface $entityManager)
     {
         $this->noteRepository = $noteRepository;
         $this->userRepository = $userRepository;
-        $this->security = $security;
         $this->entityManager = $entityManager;
     }
 
@@ -80,9 +76,8 @@ class NotesController extends AbstractController
 
     public function deleteNote(int $id): JsonResponse
     {
-        $note = $this->noteRepository->find($id);
-        var_dump($note);
-        if (!$note) {
+        $note = $this->noteRepository->findOneBy(['id' => $id]);
+        if ($note == null) {
             return new JsonResponse('Note not found', Response::HTTP_NOT_FOUND);
         } else {
             $this->entityManager->remove($note);
