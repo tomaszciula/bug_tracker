@@ -42,7 +42,7 @@ class UserController extends AbstractController
 
     }
     #[Route('/user', name: 'app_user')]
-    public function __invoke(): JsonResponse
+    public function __invoke(): Response
     {
         $user = $this->getUser();
         $encoder = new JsonEncoder();
@@ -54,7 +54,9 @@ class UserController extends AbstractController
         $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
         $serializer = new Serializer([$normalizer], [$encoder]);
         $json = $serializer->serialize($user, 'json');
+        // $json = json_decode($json);
         return $this->json(json_decode($json));
+        // return $this->json($user);
     }
 
     #[Route('/users', name: 'app_users')]

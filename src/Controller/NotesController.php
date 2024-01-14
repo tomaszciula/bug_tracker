@@ -9,23 +9,27 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\NoteRepository;
 use App\Repository\UserRepository;
+// use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Security\Core\Security;
 
 class NotesController extends AbstractController
 {
     private NoteRepository $noteRepository;
     private UserRepository $userRepository;
     private EntityManagerInterface $entityManager;
-    public function __construct(NoteRepository $noteRepository, UserRepository $userRepository, EntityManagerInterface $entityManager)
+    private Security $security;
+    public function __construct(NoteRepository $noteRepository, UserRepository $userRepository, EntityManagerInterface $entityManager, Security $security)
     {
         $this->noteRepository = $noteRepository;
         $this->userRepository = $userRepository;
         $this->entityManager = $entityManager;
+        $this->security = $security;
     }
 
     #[Route('/notes', name: 'app_notes')]
@@ -51,6 +55,7 @@ class NotesController extends AbstractController
     #[Route('/add/note', name: 'app_add_note', methods: ['POST'])]
     public function addNote(Request $request): JsonResponse
     {
+        // $user = $this->security->getUser();
         $req = $request->getContent();
         $req = json_decode($req);
 

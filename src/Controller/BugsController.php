@@ -100,10 +100,13 @@ class BugsController extends AbstractController
     #[Route('/bug/update/status', name: 'bug_update_status', methods: 'PUT')]
     public function updateBug(Request $request): JsonResponse
     {
-        $bug = $this->bugRepository->findOneBy(['id' => $request->request->get('id')]);
+        $req = $request->getContent();
+        $request = json_decode($req);
+        $bug = $this->bugRepository->findOneBy(['id' => $request->id]);
         $bug->setStatus(
-            $request->request->get('status')
+            $request->status
         );
+        $this->entityManagerInterface->persist($bug);
         $this->entityManagerInterface->flush();
         if (http_response_code() !== 200) {
             return $this->json([
