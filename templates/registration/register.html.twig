@@ -4,17 +4,6 @@
 {% endblock %}
 
 {% block body %}
-	{# <h1>Register</h1>
-		
-		    {{ form_start(registrationForm) }}
-		        {{ form_row(registrationForm.email) }}
-		        {{ form_row(registrationForm.plainPassword, {
-		            label: 'Password'
-		        }) }}
-		        {{ form_row(registrationForm.agreeTerms) }}
-		
-		        <button type="submit" class="btn">Register</button>
-		    {{ form_end(registrationForm) }} #}
 	<body
 		class="font-mono bg-gray-400">
 		<!-- Container -->
@@ -35,20 +24,20 @@
 									<label class="block mb-2 text-sm font-bold text-gray-700" for="firstName">
 										Your Name
 									</label>
-									<input class="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline" id="firstname" name="firstname" type="text" placeholder="First Name"/>
+									<input class="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline" id="firstname" name="firstname" type="text" placeholder="First Name" required />
 								</div>
 								<div class="md:ml-2">
 									<label class="block mb-2 text-sm font-bold text-gray-700" for="lastname">
 										Last Name
 									</label>
-									<input class="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline" id="lastname" type="text" name="lastname" placeholder="Last Name"/>
+									<input class="w-full px-3 py-2 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline" id="lastname" type="text" name="lastname" placeholder="Last Name" required />
 								</div>
 							</div>
 							<div class="mb-4">
 								<label class="block mb-2 text-sm font-bold text-gray-700" for="email">
 									Email
 								</label>
-								<input class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline" type="text" id="email" name="email" placeholder="Email"/>
+								<input class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline" type="text" id="email" name="email" placeholder="Email" required />
 							</div>
 							<div class="mb-4 md:flex md:justify-between">
 
@@ -56,13 +45,13 @@
 									<label class="block mb-2 text-sm font-bold text-gray-700" for="position">
 										Position
 									</label>
-									<input class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border border-red-500 rounded shadow appearance-none focus:outline-none focus:shadow-outline" type="text" id="position" name="position" placeholder="Your current position"/>
+									<input class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border border-red-500 rounded shadow appearance-none focus:outline-none focus:shadow-outline" type="text" id="position" name="position" placeholder="Your current position" required />
 								</div>
 								<div class="md:ml-2">
 									<label class="block mb-2 text-sm font-bold text-gray-700" for="role">
 										Role
 									</label>
-									<input class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline" id="role" name="role" type="text" readonly placeholder="ROLE_USER" value="ROLE_USER"/>
+									<input class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline" id="role" name="role" type="text" readonly placeholder="ROLE_USER" value="ROLE_ADMIN"/>
 								</div>
 							</div>
 							<div class="mb-4 md:flex md:justify-between">
@@ -71,14 +60,14 @@
 									<label class="block mb-2 text-sm font-bold text-gray-700" for="password">
 										Password
 									</label>
-									<input class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border border-red-500 rounded shadow appearance-none focus:outline-none focus:shadow-outline" type="password" id="password" name="password" placeholder="******************"/>
+									<input class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border border-red-500 rounded shadow appearance-none focus:outline-none focus:shadow-outline" type="password" id="password" name="password" placeholder="******************" required />
 									<p class="text-xs italic text-red-500">Please choose a password.</p>
 								</div>
 								<div class="md:ml-2">
 									<label class="block mb-2 text-sm font-bold text-gray-700" for="c_password">
 										Confirm Password
 									</label>
-									<input class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline" id="c_password" name="c_password" type="password" placeholder="******************"/>
+									<input class="w-full px-3 py-2 mb-3 text-sm leading-tight text-gray-700 border rounded shadow appearance-none focus:outline-none focus:shadow-outline" id="c_password" name="c_password" type="password" placeholder="******************" required/>
 								</div>
 
 							</div>
